@@ -22,7 +22,7 @@
         {
             "type": "shell",
             "label": "run glfw project",
-            "command": "./${fileBasenameNoExtension}.exe",
+            "command": "${fileDirname}/${fileBasenameNoExtension}.exe",
             "dependsOn": "build glfw project",
             "group": {
                 "kind": "test",
