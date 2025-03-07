@@ -56,7 +56,7 @@ int main(void) {
     gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(1);
 
-    const GLuint ID = createShaderProgram("./shader/triangle_vertex_shader.glsl", "./shader/triangle_fragment_shader.glsl");
+    const GLuint ID = createShaderProgram("./shader/triangle/vertex_shader.glsl", "./shader/triangle/fragment_shader.glsl");
 
     GLuint vertex_buffer;
     glGenBuffers(1, &vertex_buffer);
