@@ -13,7 +13,17 @@
 
 #include "shader/shader.hpp"
 
+static void error_callback(int error, const char* description) {
+    fprintf(stderr, "Error: %s\n", description);
+}
+ 
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
 int main() {
+    glfwSetErrorCallback(error_callback);
+
     if(!glfwInit()) exit(EXIT_FAILURE);
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -22,12 +32,14 @@ int main() {
  
     GLFWmonitor* primary = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(primary);
-    // GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Texture", primary, NULL);
-    GLFWwindow* window = glfwCreateWindow(mode->width / 2.5, mode->height / 2.5, "Texture", NULL, NULL); // Use this for testing so it doesnt take over the screen
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Texture", primary, NULL);
+    // GLFWwindow* window = glfwCreateWindow(mode->width / 2.5, mode->height / 2.5, "Texture", NULL, NULL); // Use this for testing so it doesnt take over the screen
     if(!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
+
+    glfwSetKeyCallback(window, key_callback);
     
     glfwMakeContextCurrent(window);
     gladLoadGL(glfwGetProcAddress);
