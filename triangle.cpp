@@ -7,9 +7,6 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <fstream>
-#include <sstream>
-#include <string>
 
 #include "shader/shader.hpp"
  

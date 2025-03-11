@@ -3,15 +3,14 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#include <linmath/linmath.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <fstream>
-#include <sstream>
-#include <string>
 
-#include "shader/shader.hpp"
+#include <glm/glm.hpp>
+
+#include "lib/resource_manager.h"
+#include "lib/sprite_renderer.h"
 
 static void error_callback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
@@ -45,10 +44,39 @@ int main() {
     gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(1);
 
-    // [...]
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    ResourceManager::LoadShader("shader/texture/vertex.glsl", "shader/texture/fragment.glsl", nullptr, "sprite");
+    ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+    ResourceManager::GetShader("sprite").SetMatrix4("projection", (glm::mat4) glm::ortho(0.0f, static_cast<float>(mode->width), static_cast<float>(mode->height), 0.0f, -1.0f, 1.0f));
+    Shader shader = ResourceManager::GetShader("sprite");
+    SpriteRenderer* Renderer = new SpriteRenderer(shader);
+    ResourceManager::LoadTexture("textures/ball.png", true, "ball");
 
     while(!glfwWindowShouldClose(window)) {
-        // [...]
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        const float ratio = width / (float) height;
+
+        glViewport(0, 0, width, height);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+
+        Texture2D ball = ResourceManager::GetTexture("ball");
+
+        xpos -= ball.Width/2;
+        ypos -= ball.Height/2;
+
+        if(xpos <= 0) xpos = 0;
+        else if(xpos + ball.Width >= width) xpos = width - ball.Width;
+
+        if(ypos <= 0) ypos = 0;
+        else if(ypos + ball.Height >= height) ypos = height - ball.Height;
+
+        Renderer->DrawSprite(ball, glm::vec2(xpos, ypos), glm::vec2(64, 64), 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
