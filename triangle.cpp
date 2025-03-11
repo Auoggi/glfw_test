@@ -3,7 +3,8 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#include <linmath/linmath.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -11,8 +12,8 @@
 #include "shader/shader.hpp"
  
 typedef struct Vertex {
-    vec2 pos;
-    vec3 col;
+    glm::vec2 pos;
+    glm::vec3 col;
 } Vertex;
  
 static const Vertex vertices[3] = {
@@ -80,11 +81,10 @@ int main(void) {
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
  
-        mat4x4 m, p, mvp;
-        mat4x4_identity(m);
-        mat4x4_rotate_Z(m, m, (float) glfwGetTime());
-        mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        mat4x4_mul(mvp, p, m);
+        glm::mat4 m = glm::mat4(1.0f);
+        m *= glm::rotate(m, (float) glfwGetTime(), glm::vec3(0, 0, 1));
+        glm::mat4 p = glm::ortho(-ratio, ratio, -1.f, 1.f, -1.f, 1.f);
+        glm::mat4 mvp = p * m;
  
         glUseProgram(ID);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) &mvp);
