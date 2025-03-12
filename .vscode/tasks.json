@@ -6,9 +6,9 @@
             "command": "/usr/bin/x86_64-w64-mingw32-g++",
             "args": [
                 "-g",
-                "${file}",
                 "./include/glad/glad.c",
-                "./lib/shader.cpp", "./lib/texture.cpp", "./lib/resource_manager.cpp", "./lib/sprite_renderer.cpp",  
+                "${file}",
+                "$(fdfind", "-e", "cpp", ".", "'./lib'", ")",
                 "-o", "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-I", "./include", "./include/GLFW/lib-mingw-w64/libglfw3.a",
                 "-lopengl32", "-lgdi32"
