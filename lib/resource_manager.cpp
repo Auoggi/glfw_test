@@ -11,9 +11,9 @@
 std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
 
-Shader ResourceManager::LoadShader(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile, std::string name)
+Shader ResourceManager::LoadShader(const char *vShaderFile, const char *fShaderFile, std::string name)
 {
-    Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+    Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile);
     return Shaders[name];
 }
 
@@ -43,12 +43,11 @@ void ResourceManager::Clear()
         glDeleteTextures(1, &iter.second.ID);
 }
 
-Shader ResourceManager::loadShaderFromFile(const char *vShaderFile, const char *fShaderFile, const char *gShaderFile)
+Shader ResourceManager::loadShaderFromFile(const char *vShaderFile, const char *fShaderFile)
 {
     // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
     std::string fragmentCode;
-    std::string geometryCode;
     try
     {
         // open files
@@ -64,15 +63,6 @@ Shader ResourceManager::loadShaderFromFile(const char *vShaderFile, const char *
         // convert stream into string
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
-        // if geometry shader path is present, also load a geometry shader
-        if (gShaderFile != nullptr)
-        {
-            std::ifstream geometryShaderFile(gShaderFile);
-            std::stringstream gShaderStream;
-            gShaderStream << geometryShaderFile.rdbuf();
-            geometryShaderFile.close();
-            geometryCode = gShaderStream.str();
-        }
     }
     catch (std::exception e)
     {
@@ -80,10 +70,9 @@ Shader ResourceManager::loadShaderFromFile(const char *vShaderFile, const char *
     }
     const char *vShaderCode = vertexCode.c_str();
     const char *fShaderCode = fragmentCode.c_str();
-    const char *gShaderCode = geometryCode.c_str();
     // 2. now create shader object from source code
     Shader shader;
-    shader.Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+    shader.Compile(vShaderCode, fShaderCode);
     return shader;
 }
 
