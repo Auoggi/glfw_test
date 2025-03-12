@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "resource_manager.h"
 #include "texture.h"
 #include "shader.h"
 
@@ -14,6 +15,8 @@ public:
     SpriteRenderer(Shader &shader);
     // Destructor
     ~SpriteRenderer();
+    // Create new SpriteRenderer and set it up
+    static SpriteRenderer* SetupSpriteRenderer(int windowWidth, int windowHeight);
     // Renders a defined quad textured with given sprite
     void DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f);
 private:

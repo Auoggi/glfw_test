@@ -47,11 +47,7 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    ResourceManager::LoadShader("shader/texture/vertex.glsl", "shader/texture/fragment.glsl", "sprite");
-    ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
-    ResourceManager::GetShader("sprite").SetMatrix4("projection", (glm::mat4) glm::ortho(0.0f, static_cast<float>(mode->width), static_cast<float>(mode->height), 0.0f, -1.0f, 1.0f));
-    Shader shader = ResourceManager::GetShader("sprite");
-    SpriteRenderer* Renderer = new SpriteRenderer(shader);
+    SpriteRenderer* Renderer = SpriteRenderer::SetupSpriteRenderer(mode->width, mode->height);
     ResourceManager::LoadTexture("textures/ball.png", true, "ball");
 
     while(!glfwWindowShouldClose(window)) {

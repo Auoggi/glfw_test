@@ -9,6 +9,14 @@ SpriteRenderer::~SpriteRenderer() {
     glDeleteVertexArrays(1, &this->quadVAO);
 }
 
+SpriteRenderer* SpriteRenderer::SetupSpriteRenderer(int windowWidth, int windowHeight) {
+    ResourceManager::LoadShader("shader/texture/vertex.glsl", "shader/texture/fragment.glsl", "sprite");
+    ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+    ResourceManager::GetShader("sprite").SetMatrix4("projection", (glm::mat4) glm::ortho(0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), 0.0f, -1.0f, 1.0f));
+    Shader shader = ResourceManager::GetShader("sprite");
+    return new SpriteRenderer(shader);
+}
+
 void SpriteRenderer::DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size, float rotate) {
     // prepare transformations
     this->shader.Use();
