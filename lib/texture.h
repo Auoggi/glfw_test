@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <glad/gl.h>
+#include <glad/glad.h>
 
 class Texture2D
 {

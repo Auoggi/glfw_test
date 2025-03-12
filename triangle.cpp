@@ -1,5 +1,5 @@
 #define GLAD_GL_IMPLEMENTATION
-#include <glad/gl.h>
+#include <glad/glad.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
@@ -9,7 +9,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#include "shader/shader.hpp"
+#include "lib/resource_manager.h"
  
 typedef struct Vertex {
     glm::vec2 pos;
@@ -54,16 +54,16 @@ int main(void) {
     gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(1);
 
-    const GLuint ID = createShaderProgram("./shader/triangle/vertex_shader.glsl", "./shader/triangle/fragment_shader.glsl");
+    Shader shader = ResourceManager::LoadShader("./shader/triangle/vertex_shader.glsl", "./shader/triangle/fragment_shader.glsl", nullptr, "shader");
 
     GLuint vertex_buffer;
     glGenBuffers(1, &vertex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    const GLint mvp_location = glGetUniformLocation(ID, "MVP");
-    const GLint vpos_location = glGetAttribLocation(ID, "vPos");
-    const GLint vcol_location = glGetAttribLocation(ID, "vCol");
+    const GLint mvp_location = glGetUniformLocation(shader.ID, "MVP");
+    const GLint vpos_location = glGetAttribLocation(shader.ID, "vPos");
+    const GLint vcol_location = glGetAttribLocation(shader.ID, "vCol");
 
     GLuint vertex_array;
     glGenVertexArrays(1, &vertex_array);
@@ -82,11 +82,11 @@ int main(void) {
         glClear(GL_COLOR_BUFFER_BIT);
  
         glm::mat4 m = glm::mat4(1.0f);
-        m *= glm::rotate(m, (float) glfwGetTime(), glm::vec3(0, 0, 1));
+        m = glm::rotate(m, (float) glfwGetTime(), glm::vec3(0, 0, 1));
         glm::mat4 p = glm::ortho(-ratio, ratio, -1.f, 1.f, -1.f, 1.f);
         glm::mat4 mvp = p * m;
  
-        glUseProgram(ID);
+        shader = shader.Use();
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) &mvp);
         glBindVertexArray(vertex_array);
         glDrawArrays(GL_TRIANGLES, 0, 3);

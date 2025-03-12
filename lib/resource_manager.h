@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-#include <glad/gl.h>
+#include <glad/glad.h>
 
 #include "texture.h"
 #include "shader.h"

@@ -7,7 +7,7 @@
             "args": [
                 "-g",
                 "${file}",
-                "./include/glad/gl.c",
+                "./include/glad/glad.c",
                 "./lib/shader.cpp", "./lib/texture.cpp", "./lib/resource_manager.cpp", "./lib/sprite_renderer.cpp",  
                 "-o", "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-I", "./include", "./include/GLFW/lib-mingw-w64/libglfw3.a",
