@@ -4,7 +4,6 @@ out vec4 color;
 
 uniform sampler2D image;
 
-void main()
-{    
+void main() {    
     color = texture(image, TexCoords);
 }  

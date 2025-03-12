@@ -2,13 +2,11 @@
 
 #include <stdio.h>
 
-Texture2D::Texture2D() : Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_RGB), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_NEAREST), Filter_Max(GL_NEAREST)
-{
+Texture2D::Texture2D() : Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_RGB), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_NEAREST), Filter_Max(GL_NEAREST) {
     glGenTextures(1, &this->ID);
 }
 
-void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char* data)
-{
+void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char* data) {
     this->Width = width;
     this->Height = height;
     // create Texture
@@ -23,7 +21,6 @@ void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char*
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture2D::Bind() const
-{
+void Texture2D::Bind() const {
     glBindTexture(GL_TEXTURE_2D, this->ID);
 }
