@@ -48,7 +48,7 @@ int main() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     SpriteRenderer* Renderer = SpriteRenderer::SetupSpriteRenderer(mode->width, mode->height);
-    ResourceManager::LoadTexture("textures/ball.png", true, "ball");
+    Texture2D ball = ResourceManager::LoadTexture("textures/ball.png", true, "ball");
 
     while(!glfwWindowShouldClose(window)) {
         int width, height;
@@ -61,8 +61,6 @@ int main() {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
 
-        Texture2D ball = ResourceManager::GetTexture("ball");
-
         xpos -= ball.Width/2;
         ypos -= ball.Height/2;
 
@@ -72,7 +70,7 @@ int main() {
         if(ypos <= 0) ypos = 0;
         else if(ypos + ball.Height >= height) ypos = height - ball.Height;
 
-        Renderer->DrawSprite(ball, glm::vec2(xpos, ypos), glm::vec2(64, 64), 0);
+        Renderer->DrawSprite(ball, glm::vec2(xpos, ypos), glm::vec2(ball.Width, ball.Height));
 
         glfwSwapBuffers(window);
         glfwPollEvents();

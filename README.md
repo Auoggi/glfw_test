@@ -4,10 +4,10 @@ A small project containing a 2d rendering engine using opengl
 
 ## TODO
 
-- Abstract away texture loading
 - Minimize glm
 - Fix error printing in shader.h
 - Improve building
+- Implement text rendering
 
 ## Dependencies
 
