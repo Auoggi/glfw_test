@@ -3,11 +3,11 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
-
-#include <glm/glm.hpp>
 
 #include "lib/resource_manager.h"
 #include "lib/sprite_renderer.h"

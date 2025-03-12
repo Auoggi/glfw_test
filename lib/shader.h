@@ -1,11 +1,11 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <string>
-
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <string>
 
 // General purpose shader object. Compiles from file, generates
 // compile/link-time error messages and hosts several utility 

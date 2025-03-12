@@ -1,10 +1,10 @@
 #ifndef RESOURCE_MANAGER_H
 #define RESOURCE_MANAGER_H
 
+#include <glad/glad.h>
+
 #include <map>
 #include <string>
-
-#include <glad/glad.h>
 
 #include "texture.h"
 #include "shader.h"
