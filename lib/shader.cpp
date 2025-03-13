@@ -81,13 +81,13 @@ void Shader::checkCompileErrors(unsigned int object, std::string type) {
         glGetShaderiv(object, GL_COMPILE_STATUS, &success);
         if(!success) {
             glGetShaderInfoLog(object, 1024, NULL, infoLog);
-            fprintf(stdout, "| ERROR::SHADER: Compile-time error: \nType: %s\n%s\n\n", type, infoLog);
+            fprintf(stdout, "| ERROR::SHADER: Compile-time error: \nType: %s\n%s\n", type.c_str(), infoLog);
         }
     } else {
         glGetProgramiv(object, GL_LINK_STATUS, &success);
         if(!success) {
             glGetProgramInfoLog(object, 1024, NULL, infoLog);
-            fprintf(stdout, "| ERROR::SHADER: Link-time error: \nType: %s\n%s\n\n", type, infoLog);
+            fprintf(stdout, "| ERROR::SHADER: Link-time error: \nType: %s\n%s\n", type.c_str(), infoLog);
         }
     }
 }
