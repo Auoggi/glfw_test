@@ -11,5 +11,5 @@ A small project containing a 2d rendering engine using opengl
 ## Dependencies
 
 ``` Bash
-sudo apt install g++-mingw-w64-x86-64 gcc-mingw-w64-x86-64 fd-find
+sudo apt install gcc g++ fd-find libglfw3 libglfw3-dev pkgconf
 ```

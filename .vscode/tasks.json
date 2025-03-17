@@ -3,15 +3,16 @@
         {
             "type": "shell",
             "label": "build glfw project",
-            "command": "/usr/bin/x86_64-w64-mingw32-g++",
+            "command": "g++",
             "args": [
                 "-g",
                 "./include/glad/glad.c",
                 "${file}",
                 "$(fdfind", "-e", "cpp", ".", "'./lib'", ")",
-                "-o", "${fileDirname}/${fileBasenameNoExtension}.exe",
-                "-I", "./include", "./include/GLFW/lib-mingw-w64/libglfw3.a",
-                "-lopengl32", "-lgdi32"
+                "$(pkg-config", "--cflags", "glfw3)",
+                "-o", "${fileDirname}/${fileBasenameNoExtension}",
+                "-I", "./include",
+                "$(pkg-config", "--static", "--libs", "glfw3)", "-lGL"
             ],
             "problemMatcher": [
                 "$gcc"
@@ -24,7 +25,7 @@
         {
             "type": "shell",
             "label": "run glfw project",
-            "command": "${fileDirname}/${fileBasenameNoExtension}.exe",
+            "command": "${fileDirname}/${fileBasenameNoExtension}",
             "dependsOn": "build glfw project",
             "group": {
                 "kind": "test",

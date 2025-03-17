@@ -36,8 +36,8 @@ int main(void) {
  
     if(!glfwInit()) exit(EXIT_FAILURE);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
  
     GLFWmonitor* primary = glfwGetPrimaryMonitor();
@@ -55,7 +55,7 @@ int main(void) {
     gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(1);
 
-    Shader shader = ResourceManager::LoadShader("./shader/triangle/vertex_shader.glsl", "./shader/triangle/fragment_shader.glsl", nullptr, "shader");
+    Shader shader = ResourceManager::LoadShader("./shader/triangle/vertex_shader.glsl", "./shader/triangle/fragment_shader.glsl", "shader");
 
     GLuint vertex_buffer;
     glGenBuffers(1, &vertex_buffer);
