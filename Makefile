@@ -23,5 +23,5 @@ run: texture_gl
 
 .PHONY: clean
 clean:
-	rm -f $(shell fdfind -e o)
+	rm -f $(shell fdfind -I -e o)
 	rm -rf $(BUILD_DIR)
