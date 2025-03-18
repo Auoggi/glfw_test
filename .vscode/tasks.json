@@ -2,6 +2,33 @@
     "tasks": [
         {
             "type": "shell",
+            "label": "create build dir",
+            "command": "rm -rf .build && mkdir .build",
+            "hide": true
+        },
+        {
+            "type": "shell",
+            "label": "windows_build glfw project",
+            "command": "/usr/bin/x86_64-w64-mingw32-g++",
+            "args": [
+                "-g",
+                "./include/glad/glad.c",
+                "${file}",
+                "$(fdfind", "-e", "cpp", ".", "'./lib'", ")",
+                "-o", ".build/${fileBasenameNoExtension}.exe",
+                "-I", "./include", "./include/GLFW/lib-mingw-w64/libglfw3.a",
+                "-lopengl32", "-lgdi32"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
             "label": "build glfw project",
             "command": "g++",
             "args": [
@@ -10,7 +37,34 @@
                 "${file}",
                 "$(fdfind", "-e", "cpp", ".", "'./lib'", ")",
                 "$(pkg-config", "--cflags", "glfw3)",
-                "-o", "${fileDirname}/${fileBasenameNoExtension}",
+                "-o", ".build/${fileBasenameNoExtension}",
+                "-I", "./include",
+                "$(pkg-config", "--static", "--libs", "glfw3)", "-lGL"
+            ],
+            "dependsOn": [
+                "create build dir",
+                "windows_build glfw project",
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "test_build glfw project",
+            "command": "g++",
+            "args": [
+                "-g",
+                "./include/glad/glad.c",
+                "${file}",
+                "$(fdfind", "-e", "cpp", ".", "'./lib'", ")",
+                "$(pkg-config", "--cflags", "glfw3)",
+                "-o", "${fileBasenameNoExtension}",
                 "-I", "./include",
                 "$(pkg-config", "--static", "--libs", "glfw3)", "-lGL"
             ],
@@ -25,13 +79,19 @@
         {
             "type": "shell",
             "label": "run glfw project",
-            "command": "${fileDirname}/${fileBasenameNoExtension}",
-            "dependsOn": "build glfw project",
+            "command": "./${fileBasenameNoExtension} && rm -f ./${fileBasenameNoExtension}",
+            "dependsOn": "test_build glfw project",
             "group": {
                 "kind": "test",
                 "isDefault": true
             }
-        }
+        },
+        {
+            "type": "shell",
+            "label": "clean test_build",
+            "command": "rm -f ./${fileBasenameNoExtension}",
+            "hide": true
+        },
     ],
     "version": "2.0.0"
 }
