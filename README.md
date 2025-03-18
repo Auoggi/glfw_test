@@ -5,8 +5,8 @@ A small project containing a 2d rendering engine using opengl
 ## TODO
 
 - Minimize glm
-- Improve building
-- Implement text rendering
+- Improve building, possibly build for both linux and windows
+- Implement text rendering?
 
 ## Dependencies
 
