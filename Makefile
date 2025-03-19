@@ -1,3 +1,5 @@
+# Learning rescource: https://makefiletutorial.com
+
 BUILD_DIR := .build
 
 CFLAGS := -g -I include
