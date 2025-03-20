@@ -4,8 +4,7 @@ A small project containing a 2d rendering engine using opengl
 
 ## TODO
 
-- Minimize glm
-- Improve building
+- Minimize glm?
 - Implement text rendering?
 
 ## Dependencies

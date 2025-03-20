@@ -6,33 +6,30 @@
 .PRECIOUS: %.exe.o
 
 BUILD_DIR := .build
+MAIN_FILE := texture_gl
 
-CFLAGS := -g -I include
-CXXFLAGS := $(CFLAGS) 
-FLAGS := $(CFLAGS) $$(pkg-config --static --libs glfw3 gl)
-DEPS := include/glad/glad.o $(patsubst %.cpp, %.o, $(wildcard lib/*.cpp))
+CXXFLAGS := -g -I include
+FLAGS := $(CXXFLAGS) $$(pkg-config --static --libs glfw3 gl)
+WFLAGS := $(CXXFLAGS) ./include/GLFW/lib-mingw-w64/libglfw3.a -lopengl32 -lgdi32
+DEPS := include/glad/glad.o $(patsubst %.cpp, %.o, $(shell fdfind -e cpp . ./lib))
+CXX := g++
 
-$(BUILD_DIR)/%: %.o $(DEPS) $(BUILD_DIR)
-	$(CXX) $< $(DEPS) -o $@ $(FLAGS)
+%.exe %.exe.o: CXX := x86_64-w64-mingw32-g++
 
-WCC := x86_64-w64-mingw32-gcc
-WCXX := x86_64-w64-mingw32-g++
-WFLAGS := $(CFLAGS) ./include/GLFW/lib-mingw-w64/libglfw3.a -lopengl32 -lgdi32
-WDEPS := $(DEPS:.o=.exe.o)
+$(BUILD_DIR)/%: $(BUILD_DIR) %.o $(DEPS)
+	$(CXX) $(filter-out $(BUILD_DIR), $^) -o $@ $(FLAGS)
 
-$(BUILD_DIR)/%.exe: %.exe.o $(WDEPS) $(BUILD_DIR) 
-	$(WCXX) $< $(WDEPS) -o $@ $(WFLAGS)
+%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $^ -o $@
 
-%.exe.o: %.c
-	$(WCC) -c $(CFLAGS) $^ -o $@
+$(BUILD_DIR)/%.exe: $(BUILD_DIR) %.exe.o $(DEPS:.o=.exe.o) 
+	$(CXX) $(filter-out $(BUILD_DIR), $^) -o $@ $(WFLAGS)
 
 %.exe.o: %.cpp
-	$(WCXX) -c $(CXXFLAGS) $^ -o $@
+	$(CXX) -c $(CXXFLAGS) $^ -o $@
 	
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
-
-MAIN_FILE := texture_gl
 
 .PHONY: run
 run: $(BUILD_DIR)/$(MAIN_FILE)
