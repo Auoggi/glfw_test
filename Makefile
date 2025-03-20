@@ -2,35 +2,44 @@
 # https://makefiletutorial.com
 # https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
+.PRECIOUS: %.o
+.PRECIOUS: %.exe.o
+
 BUILD_DIR := .build
 
 CFLAGS := -g -I include
 CXXFLAGS := $(CFLAGS) 
-GLFW_LIBS := $$(pkg-config --static --libs glfw3 gl)
-WIN_LIBS := $(CFLAGS) ./include/GLFW/lib-mingw-w64/libglfw3.a -lopengl32 -lgdi32
+FLAGS := $(CFLAGS) $$(pkg-config --static --libs glfw3 gl)
 DEPS := include/glad/glad.o $(patsubst %.cpp, %.o, $(wildcard lib/*.cpp))
 
-$(BUILD_DIR)/texture_gl: $(BUILD_DIR) texture_gl.o $(DEPS)
-	$(CXX) $(CXXFLAGS) texture_gl.o $(DEPS) -o $@ $(GLFW_LIBS)
+$(BUILD_DIR)/%: %.o $(DEPS) $(BUILD_DIR)
+	$(CXX) $< $(DEPS) -o $@ $(FLAGS)
 
-$(BUILD_DIR)/texture_gl.exe: $(BUILD_DIR) texture_gl.exe.o $(DEPS:.o=.exe.o)
-	x86_64-w64-mingw32-g++ texture_gl.exe.o $(DEPS:.o=.exe.o) -o $@ $(WIN_LIBS)
+WCC := x86_64-w64-mingw32-gcc
+WCXX := x86_64-w64-mingw32-g++
+WFLAGS := $(CFLAGS) ./include/GLFW/lib-mingw-w64/libglfw3.a -lopengl32 -lgdi32
+WDEPS := $(DEPS:.o=.exe.o)
 
-./include/glad/glad.exe.o: ./include/glad/glad.c
-	x86_64-w64-mingw32-gcc -c $^ -o $@ $(CFLAGS)
+$(BUILD_DIR)/%.exe: %.exe.o $(WDEPS) $(BUILD_DIR) 
+	$(WCXX) $< $(WDEPS) -o $@ $(WFLAGS)
+
+%.exe.o: %.c
+	$(WCC) -c $(CFLAGS) $^ -o $@
 
 %.exe.o: %.cpp
-	x86_64-w64-mingw32-g++ -c $^ -o $@ $(CXXFLAGS)
-
+	$(WCXX) -c $(CXXFLAGS) $^ -o $@
+	
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
 
+MAIN_FILE := texture_gl
+
 .PHONY: run
-run: $(BUILD_DIR)/texture_gl
+run: $(BUILD_DIR)/$(MAIN_FILE)
 	$<
 
 .PHONY: build
-build: $(BUILD_DIR)/texture_gl $(BUILD_DIR)/texture_gl.exe
+build: $(BUILD_DIR)/$(MAIN_FILE) $(BUILD_DIR)/$(MAIN_FILE).exe
 
 .PHONY: clean
 clean:
