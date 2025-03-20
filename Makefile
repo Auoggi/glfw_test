@@ -9,8 +9,8 @@ BUILD_DIR := .build
 MAIN_FILE := texture_gl
 
 CXXFLAGS := -g -I include
-FLAGS := $(CXXFLAGS) $$(pkg-config --static --libs glfw3 gl)
 WFLAGS := $(CXXFLAGS) ./include/GLFW/lib-mingw-w64/libglfw3.a -lopengl32 -lgdi32
+FLAGS := $(CXXFLAGS) $$(pkg-config --static --libs glfw3 gl)
 DEPS := include/glad/glad.o $(patsubst %.cpp, %.o, $(shell fdfind -e cpp . ./lib))
 CXX := g++
 
