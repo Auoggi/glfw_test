@@ -2,8 +2,7 @@
 # https://makefiletutorial.com
 # https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
-# .PRECIOUS: %.o
-# .PRECIOUS: %.exe.o
+.PRECIOUS: %.o %.exe.o
 
 LIB_DIR := lib
 BUILD_DIR := .build
@@ -37,9 +36,10 @@ run: $(BUILD_DIR)/$(MAIN_FILE)
 	$<
 
 .PHONY: build
-build: 
-	$(MAKE) $(BUILD_DIR)/$(MAIN_FILE)
-	$(MAKE) $(BUILD_DIR)/$(MAIN_FILE).exe
+build: CXXFLAGS := $(filter-out -g, $(CXXFLAGS))
+build:
+	$(MAKE) CXXFLAGS="$(CXXFLAGS)" $(BUILD_DIR)/$(MAIN_FILE)
+	$(MAKE) CXXFLAGS="$(CXXFLAGS)" $(BUILD_DIR)/$(MAIN_FILE).exe
 
 .PHONY: clean
 clean:
