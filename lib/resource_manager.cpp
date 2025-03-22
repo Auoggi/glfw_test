@@ -20,6 +20,14 @@ Shader ResourceManager::GetShader(std::string name) {
     return Shaders[name];
 }
 
+Shader ResourceManager::SetShader(const char *vShaderCode, const char *fShaderCode, std::string name) {
+    Shader shader;
+    shader.Compile(vShaderCode, fShaderCode);
+    Shaders[name] = shader;
+
+    return Shaders[name];
+}
+
 Texture2D ResourceManager::LoadTexture(const char *file, bool alpha, std::string name) {
     Textures[name] = loadTextureFromFile(file, alpha);
     return Textures[name];

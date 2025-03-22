@@ -10,7 +10,9 @@ SpriteRenderer::~SpriteRenderer() {
 }
 
 SpriteRenderer* SpriteRenderer::SetupSpriteRenderer(int windowWidth, int windowHeight) {
-    ResourceManager::LoadShader("shader/texture/vertex.glsl", "shader/texture/fragment.glsl", "sprite");
+    const char *vertex = "#version 330 core\nlayout (location = 0) in vec4 vertex;\nout vec2 TexCoords;\nuniform mat4 model;\nuniform mat4 projection;\nvoid main() {\nTexCoords = vertex.zw;\ngl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);\n}\n";
+    const char *fragment = "#version 330 core\nin vec2 TexCoords;\nout vec4 color;\nuniform sampler2D image;\nvoid main() {\ncolor = texture(image, TexCoords);\n}\n";
+    ResourceManager::SetShader(vertex, fragment, "sprite");
     ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", (glm::mat4) glm::ortho(0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), 0.0f, -1.0f, 1.0f));
     Shader shader = ResourceManager::GetShader("sprite");
